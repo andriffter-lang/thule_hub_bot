@@ -80,6 +80,10 @@ function App() {
             cursor: "pointer",
             boxShadow: "0 2px 8px rgba(0,0,0,0.4)",
             transition: "transform 0.12s ease, box-shadow 0.12s ease",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            textAlign: "center",
           }}
           onMouseDown={(e) => (e.currentTarget.style.transform = "scale(0.97)")}
           onMouseUp={(e) => (e.currentTarget.style.transform = "scale(1)")}
@@ -90,6 +94,7 @@ function App() {
               fontSize: "18px",
               fontWeight: "600",
               color: accentColor, // зелёный акцент в заголовке
+              textAlign: "center",
             }}
           >
             {section.title}
@@ -100,6 +105,7 @@ function App() {
               opacity: 0.8,
               fontSize: "13px",
               marginTop: "6px",
+              textAlign: "center",
             }}
           >
             {section.description}
@@ -119,6 +125,7 @@ function App() {
             cursor: "pointer",
             boxShadow: "0 2px 8px rgba(0,0,0,0.4)",
             transition: "transform 0.12s ease, box-shadow 0.12s ease",
+            textAlign: "center",
           }}
           onMouseDown={(e) => (e.currentTarget.style.transform = "scale(0.97)")}
           onMouseUp={(e) => (e.currentTarget.style.transform = "scale(1)")}
