@@ -25,36 +25,36 @@ function App() {
     tg?.sendData(JSON.stringify({ type: "open_section", section: sectionId }));
   };
 
-  // === 랜домизация поворота для реализма ===
+  // Генерация случайной позиции и наклона бетонного блока
   const randomParams = () => {
     return {
       rot: Math.floor(Math.random() * 6 - 3),
-      offsetX: Math.floor(Math.random() * 8 - 4),
-      offsetY: Math.floor(Math.random() * 8 - 4),
+      offsetX: Math.floor(Math.random() * 10 - 5),
+      offsetY: Math.floor(Math.random() * 10 - 5),
     };
   };
 
-  // === Эффект пыли при падении ===
+  // Эффект пыли при падении
   const createDust = (element: HTMLElement) => {
     const dust = document.createElement("div");
 
     Object.assign(dust.style, {
       position: "absolute",
-      width: "80px",
-      height: "80px",
+      width: "90px",
+      height: "90px",
       backgroundImage: "url('/images/dust.png')",
       backgroundSize: "cover",
       pointerEvents: "none",
       opacity: "0",
-      bottom: "-20px",
+      bottom: "-25px",
       left: "50%",
-      transform: "translateX(-50%) scale(0.6)",
-      animation: "dustFade 0.7s ease-out forwards",
+      transform: "translateX(-50%) scale(0.5)",
+      animation: "dustFade 0.85s ease-out forwards",
     });
 
     element.appendChild(dust);
 
-    setTimeout(() => dust.remove(), 800);
+    setTimeout(() => dust.remove(), 900);
   };
 
   return (
@@ -83,7 +83,7 @@ function App() {
         Thule Hub Russia
       </h1>
 
-      {/* BUTTONS */}
+      {/* MAIN BUTTONS */}
       {SECTIONS.map((section, index) => {
         const { rot, offsetX, offsetY } = randomParams();
 
@@ -93,25 +93,28 @@ function App() {
             onClick={() => handleClick(section.id)}
             ref={(el) => {
               if (el) {
-                setTimeout(() => createDust(el), index * 130 + 350);
+                setTimeout(() => createDust(el), index * 140 + 350); // пыль появляется после падения
               }
             }}
             style={{
               position: "relative",
               padding: "20px",
-              borderRadius: "10px",
+              borderRadius: "12px",
 
-              backgroundImage: `
-                url('/images/concrete_base.jpg'),
-                url('/images/concrete_cracks.png'),
-                url('/images/concrete_noise.png')
-              `,
-              backgroundBlendMode: "overlay, normal, soft-light",
-              backgroundSize: "cover, cover, 300%",
+              // бетон
+              backgroundImage: "url('/images/concrete_base.jpg')",
+              backgroundSize: "cover",
               backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
 
               border: "2px solid #3a3a3a",
-              boxShadow: "0 8px 20px rgba(0,0,0,0.75)",
+
+              // объём + затемнение по краям (эффект старого бетона)
+              boxShadow: `
+                0 8px 20px rgba(0,0,0,0.75),
+                inset 0 0 40px rgba(0,0,0,0.35),
+                inset 0 -8px 15px rgba(0,0,0,0.25)
+              `,
 
               cursor: "pointer",
               display: "flex",
@@ -121,7 +124,10 @@ function App() {
               overflow: "visible",
 
               opacity: 0,
+
+              // падение + случайный наклон
               transform: `translate(${offsetX}px, ${offsetY - 40}px) rotate(${rot}deg)`,
+
               animation: `drop 0.65s cubic-bezier(.25,.75,.45,1.4) forwards`,
               animationDelay: `${index * 0.13}s`,
             }}
@@ -161,27 +167,23 @@ function App() {
         );
       })}
 
-      {/* ADMIN */}
+      {/* ADMIN PANEL */}
       {isAdmin && (
         <div
           onClick={() => handleClick("admin")}
           style={{
             padding: "20px",
-            borderRadius: "10px",
-            backgroundImage: `
-              url('/images/concrete_base.jpg'),
-              url('/images/concrete_cracks.png'),
-              url('/images/concrete_noise.png')
-            `,
-            backgroundBlendMode: "overlay, normal, soft-light",
-            backgroundSize: "cover, cover, 300%",
+            borderRadius: "12px",
+            backgroundImage: "url('/images/concrete_base.jpg')",
+            backgroundSize: "cover",
             backgroundPosition: "center",
             border: "2px solid #3a3a3a",
-            boxShadow: "0 8px 20px rgba(0,0,0,0.75)",
-
+            boxShadow: `
+              0 8px 20px rgba(0,0,0,0.75),
+              inset 0 0 40px rgba(0,0,0,0.35)
+            `,
             cursor: "pointer",
             textAlign: "center",
-
             opacity: 0,
             transform: `translateY(-40px)`,
             animation: `drop 0.65s cubic-bezier(.25,.75,.45,1.4) forwards`,
