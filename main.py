@@ -12,8 +12,8 @@ BOT_TOKEN = "8444074524:AAE9u8KIpkVynFihXeqjHnorMvgF7xGeKdk"
 ADMIN_ID = 230325201
 
 # 🔧 Импортируем роутеры
-from shop_router import shop_router
-from rental_router import rental_router
+from shop_router import shop_router, shop_menu
+from rental_router import rental_router, rental_menu
 from market_router import market_router
 from repair_router import repair_router
 from admin_router import admin_router
@@ -98,33 +98,39 @@ async def webapp_data_handler(message: types.Message):
         await message.answer("❗ Не удалось обработать данные из Mini App")
         return
 
-    action = data.get("action")
+    # 👉 ВАЖНО: мини-апп шлёт type, а не action
+    msg_type = data.get("type")
+    section = data.get("section")
 
-    # Пример: Mini App отправила { "action": "hello_from_miniapp" }
-    if action == "hello_from_miniapp":
-        await message.answer("📩 Mini App прислала сообщение!")
+    # На будущее — если захочешь другие типы сообщений
+    if msg_type != "open_section":
+        await message.answer(f"📨 Данные из Mini App: {data}")
         return
 
-    # Пример будущих действий
-    if action == "open_section":
-        section = data.get("section")
+    # 🔹 Маршрутизация по разделам
+    if section == "shop":
+        await shop_menu(message)          # вызываем настоящее меню магазина
 
-        if section == "shop":
-            await message.answer("🛒 Открываю магазин…")
-        elif section == "rental":
-            await message.answer("🚗 Открываю аренду…")
-        elif section == "market":
-            await message.answer("📦 Открываю рынок оборудования…")
-        elif section == "repair":
-            await message.answer("🧰 Открываю ремонт…")
-        elif section == "faq":
-            await message.answer("❓ Открываю FAQ…")
-        elif section == "community":
-            await message.answer("💬 Открываю сообщество…")
-        elif section == "admin":
-            await message.answer("⚙️ Открываю админ-панель…")
-        else:
-            await message.answer("🤔 Неизвестный раздел из Mini App")
+    elif section == "rental":
+        await rental_menu(message)        # вызываем меню аренды
+
+    elif section == "market":
+        await message.answer("📦 Открываю рынок оборудования…")
+
+    elif section == "repair":
+        await message.answer("🧰 Открываю ремонт…")
+
+    elif section == "faq":
+        await message.answer("❓ Открываю FAQ…")
+
+    elif section == "community":
+        await message.answer("💬 Открываю сообщество…")
+
+    elif section == "admin":
+        await message.answer("⚙️ Открываю админ-панель…")
+
+    else:
+        await message.answer(f"🤔 Неизвестный раздел из Mini App: {section}")
 
         return
 
@@ -133,6 +139,9 @@ async def webapp_data_handler(message: types.Message):
 # =======================================================
 #                ПОДКЛЮЧЕНИЕ ROUTERS
 # =======================================================
+@dp.message(F.web_app_data)
+async def debug_webapp(message: types.Message):
+    await message.answer("DEBUG:\n" + str(message.web_app_data.data))
 
 dp.include_router(shop_router)
 dp.include_router(rental_router)
@@ -152,39 +161,5 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
-@dp.message(F.web_app_data)
-async def handle_webapp(message: types.Message):
-    try:
-        data = json.loads(message.web_app_data.data)
-    except Exception:
-        await message.answer("Ошибка обработки данных.")
-        return
 
-    if data.get("type") == "open_section":
-        section = data.get("section")
-
-        # Маршрутизация по разделам
-        if section == "shop":
-            await message.answer("Открываю магазин 🏪")
-            await message.answer("Введите запрос или выберите товар...")
-        
-        elif section == "rental":
-            await message.answer("Открываю аренду 🚗")
-        
-        elif section == "market":
-            await message.answer("Открываю рынок 📦")
-        
-        elif section == "repair":
-            await message.answer("Открываю ремонт 🧰")
-        
-        elif section == "faq":
-            await message.answer("Переходим к FAQ ❓")
-        
-        elif section == "community":
-            await message.answer("Переходим в сообщество 💬")
-        
-        elif section == "admin":
-            await message.answer("Админ-панель ⚙️")
-        
-        else:
-            await message.answer(f"Неизвестный раздел: {section}")
+            
