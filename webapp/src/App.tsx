@@ -15,13 +15,6 @@ function App() {
   const tg = window.Telegram?.WebApp;
   const user = tg?.initDataUnsafe?.user;
 
-  // === Цвета интерфейса (стиль: черно-белый + зеленый акцент) ===
-  const backgroundColor = "#000000";     // чисто чёрный фон
-  const textColor = "#FFFFFF";           // белый текст
-  const cardBackground = "#111111";      // карточка — мягкий чёрный
-  const cardBorder = "1px solid #333";   // тонкая тёмно-серая граница
-  const accentColor = "#4CAF50";         // зелёный акцент
-
   const isAdmin = user && user.id === ADMIN_ID;
 
   useEffect(() => {
@@ -30,12 +23,7 @@ function App() {
   }, [tg]);
 
   const handleClick = (sectionId: string) => {
-    tg?.sendData(
-      JSON.stringify({
-        type: "open_section",
-        section: sectionId,
-      })
-    );
+    tg?.sendData(JSON.stringify({ type: "open_section", section: sectionId }));
   };
 
   return (
@@ -45,56 +33,64 @@ function App() {
         display: "flex",
         flexDirection: "column",
         gap: "16px",
-        background: backgroundColor,
-        color: textColor,
-        width: "100%",
         minHeight: "100vh",
-        boxSizing: "border-box",
-        overflowX: "hidden",
+        color: "#fff",
+        background: "rgba(0, 0, 0, 0.65)",
+        backdropFilter: "blur(2px)",
       }}
     >
-
-      {/* === Заголовок === */}
       <h1
         style={{
           textAlign: "center",
-          fontSize: "24px",
+          fontSize: "26px",
           fontWeight: "700",
-          color: textColor,
+          marginBottom: "10px",
+          color: "#4CAF50",
+          textShadow: "0 3px 6px rgba(0,0,0,0.6)",
         }}
       >
         Thule Hub Russia
       </h1>
 
-      {/* === Разделы === */}
-      {SECTIONS.map((section) => (
+      {SECTIONS.map((section, index) => (
         <div
           key={section.id}
           onClick={() => handleClick(section.id)}
           style={{
             padding: "18px",
-            borderRadius: "16px",
-            background: cardBackground,
-            border: cardBorder,
-            color: textColor,
+            borderRadius: "14px",
+            background: "#3d3d3d",
+            backgroundImage: `
+              repeating-linear-gradient(
+                45deg,
+                rgba(0,0,0,0.15) 0,
+                rgba(0,0,0,0.15) 2px,
+                rgba(255,255,255,0.05) 2px,
+                rgba(255,255,255,0.05) 4px
+              )
+            `,
+            border: "1px solid #222",
+            boxShadow: "0 6px 14px rgba(0,0,0,0.5)",
             cursor: "pointer",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.4)",
-            transition: "transform 0.12s ease, box-shadow 0.12s ease",
+
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             textAlign: "center",
+
+            opacity: 0,
+            transform: "translateY(-40px)",
+            animation: `drop 0.6s ease forwards`,
+            animationDelay: `${index * 0.12}s`,
           }}
-          onMouseDown={(e) => (e.currentTarget.style.transform = "scale(0.97)")}
-          onMouseUp={(e) => (e.currentTarget.style.transform = "scale(1)")}
-          onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
         >
           <div
             style={{
-              fontSize: "18px",
+              fontSize: "20px",
               fontWeight: "600",
-              color: accentColor, // зелёный акцент в заголовке
-              textAlign: "center",
+              color: "#4CAF50",
+              marginBottom: "4px",
+              textShadow: "0 2px 4px rgba(0,0,0,0.5)",
             }}
           >
             {section.title}
@@ -104,8 +100,6 @@ function App() {
             style={{
               opacity: 0.8,
               fontSize: "13px",
-              marginTop: "6px",
-              textAlign: "center",
             }}
           >
             {section.description}
@@ -113,41 +107,28 @@ function App() {
         </div>
       ))}
 
-      {/* === Админ-панель === */}
       {isAdmin && (
         <div
           onClick={() => handleClick("admin")}
           style={{
             padding: "18px",
-            borderRadius: "16px",
-            background: "#1a1a1a",
-            border: "1px solid #444",
+            borderRadius: "14px",
+            background: "#444",
+            border: "1px solid #333",
             cursor: "pointer",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.4)",
-            transition: "transform 0.12s ease, box-shadow 0.12s ease",
+            boxShadow: "0 6px 14px rgba(0,0,0,0.55)",
             textAlign: "center",
+            opacity: 0,
+            transform: "translateY(-40px)",
+            animation: `drop 0.6s ease forwards`,
+            animationDelay: `${SECTIONS.length * 0.12}s`,
           }}
-          onMouseDown={(e) => (e.currentTarget.style.transform = "scale(0.97)")}
-          onMouseUp={(e) => (e.currentTarget.style.transform = "scale(1)")}
-          onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
         >
-          <div
-            style={{
-              fontSize: "18px",
-              fontWeight: "600",
-              color: "#4CAF50",
-            }}
-          >
+          <div style={{ fontSize: "20px", fontWeight: "600", color: "#4CAF50" }}>
             ⚙️ Админ-панель
           </div>
-          <div
-            style={{
-              opacity: 0.75,
-              fontSize: "13px",
-              marginTop: "6px",
-              color: "#ccc",
-            }}
-          >
+
+          <div style={{ opacity: 0.75, fontSize: "13px" }}>
             Управление контентом и товарами
           </div>
         </div>
