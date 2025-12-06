@@ -26,6 +26,17 @@ function App() {
     tg?.sendData(JSON.stringify({ type: "open_section", section: sectionId }));
   };
 
+  // random rotation / tile shift for unique concrete tiles
+  const randomize = () => {
+    const rot = Math.floor(Math.random() * 6 - 3); // -3° to +3°
+    const offsetX = Math.floor(Math.random() * 8 - 4); // -4px to +4px
+    const offsetY = Math.floor(Math.random() * 8 - 4);
+
+    return {
+      transform: `translate(${offsetX}px, ${offsetY}px) rotate(${rot}deg)`,
+    };
+  };
+
   return (
     <div
       style={{
@@ -35,7 +46,7 @@ function App() {
         gap: "16px",
         minHeight: "100vh",
         color: "#fff",
-        background: "transparent",        
+        background: "transparent",
       }}
     >
       <h1
@@ -45,89 +56,134 @@ function App() {
           fontWeight: "700",
           marginBottom: "10px",
           color: "#4CAF50",
-          textShadow: "0 3px 6px rgba(0,0,0,0.6)",
+          textShadow: "0 3px 6px rgba(0,0,0,0.7)",
         }}
       >
         Thule Hub Russia
       </h1>
 
-      {SECTIONS.map((section, index) => (
-        <div
-          key={section.id}
-          onClick={() => handleClick(section.id)}
-          style={{
-            padding: "18px",
-            borderRadius: "14px",
-            background: "#3d3d3d",
-            backgroundImage: `
-              repeating-linear-gradient(
-                45deg,
-                rgba(0,0,0,0.15) 0,
-                rgba(0,0,0,0.15) 2px,
-                rgba(255,255,255,0.05) 2px,
-                rgba(255,255,255,0.05) 4px
-              )
-            `,
-            border: "1px solid #222",
-            boxShadow: "0 6px 14px rgba(0,0,0,0.5)",
-            cursor: "pointer",
+      {/* MAIN BUTTONS */}
+      {SECTIONS.map((section, index) => {
+        const rand = randomize();
 
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
+        return (
+          <div
+            key={section.id}
+            onClick={() => handleClick(section.id)}
+            style={{
+              padding: "20px",
+              borderRadius: "10px",
+
+              backgroundImage: `
+                url('/images/concrete_base.jpg'),
+                url('/images/concrete_cracks.png'),
+                url('/images/concrete_noise.png')
+              `,
+              backgroundBlendMode: "overlay, normal, soft-light",
+              backgroundSize: "cover, cover, 300%",
+              backgroundPosition: "center, center, center",
+
+              border: "2px solid #3a3a3a",
+              boxShadow: "0 8px 20px rgba(0,0,0,0.75)",
+
+              cursor: "pointer",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              textAlign: "center",
+
+              opacity: 0,
+              transform: "translateY(-40px)",
+              animation: `drop 0.65s cubic-bezier(.25,.75,.45,1.4) forwards`,
+              animationDelay: `${index * 0.13}s`,
+
+              // random rotation/offset for realism
+              ...rand,
+            }}
+            onMouseDown={(e) =>
+              (e.currentTarget.style.transform = "scale(0.97)")
+            }
+            onMouseUp={(e) =>
+              (e.currentTarget.style.transform = "scale(1)")
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.transform = "scale(1)")
+            }
+          >
+            <div
+              style={{
+                fontSize: "20px",
+                fontWeight: "700",
+                color: "#ffffff",
+                textShadow: "0 2px 5px rgba(0,0,0,0.7)",
+              }}
+            >
+              {section.title}
+            </div>
+
+            <div
+              style={{
+                opacity: 0.85,
+                fontSize: "13px",
+                color: "#e5e5e5",
+                textShadow: "0 1px 3px rgba(0,0,0,0.6)",
+                marginTop: "6px",
+              }}
+            >
+              {section.description}
+            </div>
+          </div>
+        );
+      })}
+
+      {/* ADMIN PANEL */}
+      {isAdmin && (
+        <div
+          onClick={() => handleClick("admin")}
+          style={{
+            padding: "20px",
+            borderRadius: "10px",
+
+            backgroundImage: `
+              url('/images/concrete_base.jpg'),
+              url('/images/concrete_cracks.png'),
+              url('/images/concrete_noise.png')
+            `,
+            backgroundBlendMode: "overlay, normal, soft-light",
+            backgroundSize: "cover, cover, 300%",
+            backgroundPosition: "center",
+
+            border: "2px solid #3a3a3a",
+            boxShadow: "0 8px 20px rgba(0,0,0,0.75)",
+
+            cursor: "pointer",
             textAlign: "center",
 
             opacity: 0,
             transform: "translateY(-40px)",
-            animation: `drop 0.6s ease forwards`,
-            animationDelay: `${index * 0.12}s`,
+            animation: `drop 0.65s cubic-bezier(.25,.75,.45,1.4) forwards`,
+            animationDelay: `${SECTIONS.length * 0.13}s`,
           }}
         >
           <div
             style={{
               fontSize: "20px",
-              fontWeight: "600",
+              fontWeight: "700",
               color: "#4CAF50",
-              marginBottom: "4px",
-              textShadow: "0 2px 4px rgba(0,0,0,0.5)",
+              textShadow: "0 2px 5px rgba(0,0,0,0.7)",
             }}
           >
-            {section.title}
+            ⚙️ Админ-панель
           </div>
-
           <div
             style={{
               opacity: 0.8,
               fontSize: "13px",
+              color: "#e5e5e5",
+              marginTop: "6px",
+              textShadow: "0 1px 3px rgba(0,0,0,0.6)",
             }}
           >
-            {section.description}
-          </div>
-        </div>
-      ))}
-
-      {isAdmin && (
-        <div
-          onClick={() => handleClick("admin")}
-          style={{
-            padding: "18px",
-            borderRadius: "14px",
-            background: "#444",
-            border: "1px solid #333",
-            cursor: "pointer",
-            boxShadow: "0 6px 14px rgba(0,0,0,0.55)",
-            textAlign: "center",
-            opacity: 0,
-            transform: "translateY(-40px)",
-            animation: `drop 0.6s ease forwards`,
-            animationDelay: `${SECTIONS.length * 0.12}s`,
-          }}
-        >
-          <div style={{ fontSize: "20px", fontWeight: "600", color: "#4CAF50" }}>
-            ⚙️ Админ-панель
-          </div>
-
-          <div style={{ opacity: 0.75, fontSize: "13px" }}>
             Управление контентом и товарами
           </div>
         </div>
