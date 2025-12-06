@@ -14,7 +14,6 @@ const ADMIN_ID = 230325201;
 function App() {
   const tg = window.Telegram?.WebApp;
   const user = tg?.initDataUnsafe?.user;
-
   const isAdmin = user && user.id === ADMIN_ID;
 
   useEffect(() => {
@@ -26,15 +25,36 @@ function App() {
     tg?.sendData(JSON.stringify({ type: "open_section", section: sectionId }));
   };
 
-  // random rotation / tile shift for unique concrete tiles
-  const randomize = () => {
-    const rot = Math.floor(Math.random() * 6 - 3); // -3° to +3°
-    const offsetX = Math.floor(Math.random() * 8 - 4); // -4px to +4px
-    const offsetY = Math.floor(Math.random() * 8 - 4);
-
+  // === 랜домизация поворота для реализма ===
+  const randomParams = () => {
     return {
-      transform: `translate(${offsetX}px, ${offsetY}px) rotate(${rot}deg)`,
+      rot: Math.floor(Math.random() * 6 - 3),
+      offsetX: Math.floor(Math.random() * 8 - 4),
+      offsetY: Math.floor(Math.random() * 8 - 4),
     };
+  };
+
+  // === Эффект пыли при падении ===
+  const createDust = (element: HTMLElement) => {
+    const dust = document.createElement("div");
+
+    Object.assign(dust.style, {
+      position: "absolute",
+      width: "80px",
+      height: "80px",
+      backgroundImage: "url('/images/dust.png')",
+      backgroundSize: "cover",
+      pointerEvents: "none",
+      opacity: "0",
+      bottom: "-20px",
+      left: "50%",
+      transform: "translateX(-50%) scale(0.6)",
+      animation: "dustFade 0.7s ease-out forwards",
+    });
+
+    element.appendChild(dust);
+
+    setTimeout(() => dust.remove(), 800);
   };
 
   return (
@@ -47,6 +67,7 @@ function App() {
         minHeight: "100vh",
         color: "#fff",
         background: "transparent",
+        position: "relative",
       }}
     >
       <h1
@@ -62,15 +83,21 @@ function App() {
         Thule Hub Russia
       </h1>
 
-      {/* MAIN BUTTONS */}
+      {/* BUTTONS */}
       {SECTIONS.map((section, index) => {
-        const rand = randomize();
+        const { rot, offsetX, offsetY } = randomParams();
 
         return (
           <div
             key={section.id}
             onClick={() => handleClick(section.id)}
+            ref={(el) => {
+              if (el) {
+                setTimeout(() => createDust(el), index * 130 + 350);
+              }
+            }}
             style={{
+              position: "relative",
               padding: "20px",
               borderRadius: "10px",
 
@@ -81,7 +108,7 @@ function App() {
               `,
               backgroundBlendMode: "overlay, normal, soft-light",
               backgroundSize: "cover, cover, 300%",
-              backgroundPosition: "center, center, center",
+              backgroundPosition: "center",
 
               border: "2px solid #3a3a3a",
               boxShadow: "0 8px 20px rgba(0,0,0,0.75)",
@@ -91,14 +118,12 @@ function App() {
               flexDirection: "column",
               alignItems: "center",
               textAlign: "center",
+              overflow: "visible",
 
               opacity: 0,
-              transform: "translateY(-40px)",
+              transform: `translate(${offsetX}px, ${offsetY - 40}px) rotate(${rot}deg)`,
               animation: `drop 0.65s cubic-bezier(.25,.75,.45,1.4) forwards`,
               animationDelay: `${index * 0.13}s`,
-
-              // random rotation/offset for realism
-              ...rand,
             }}
             onMouseDown={(e) =>
               (e.currentTarget.style.transform = "scale(0.97)")
@@ -115,7 +140,7 @@ function App() {
                 fontSize: "20px",
                 fontWeight: "700",
                 color: "#ffffff",
-                textShadow: "0 2px 5px rgba(0,0,0,0.7)",
+                textShadow: "0 3px 6px rgba(0,0,0,0.8)",
               }}
             >
               {section.title}
@@ -126,7 +151,7 @@ function App() {
                 opacity: 0.85,
                 fontSize: "13px",
                 color: "#e5e5e5",
-                textShadow: "0 1px 3px rgba(0,0,0,0.6)",
+                textShadow: "0 2px 3px rgba(0,0,0,0.6)",
                 marginTop: "6px",
               }}
             >
@@ -136,14 +161,13 @@ function App() {
         );
       })}
 
-      {/* ADMIN PANEL */}
+      {/* ADMIN */}
       {isAdmin && (
         <div
           onClick={() => handleClick("admin")}
           style={{
             padding: "20px",
             borderRadius: "10px",
-
             backgroundImage: `
               url('/images/concrete_base.jpg'),
               url('/images/concrete_cracks.png'),
@@ -152,7 +176,6 @@ function App() {
             backgroundBlendMode: "overlay, normal, soft-light",
             backgroundSize: "cover, cover, 300%",
             backgroundPosition: "center",
-
             border: "2px solid #3a3a3a",
             boxShadow: "0 8px 20px rgba(0,0,0,0.75)",
 
@@ -160,7 +183,7 @@ function App() {
             textAlign: "center",
 
             opacity: 0,
-            transform: "translateY(-40px)",
+            transform: `translateY(-40px)`,
             animation: `drop 0.65s cubic-bezier(.25,.75,.45,1.4) forwards`,
             animationDelay: `${SECTIONS.length * 0.13}s`,
           }}
@@ -177,9 +200,9 @@ function App() {
           </div>
           <div
             style={{
-              opacity: 0.8,
+              opacity: 0.85,
               fontSize: "13px",
-              color: "#e5e5e5",
+              color: "#ddd",
               marginTop: "6px",
               textShadow: "0 1px 3px rgba(0,0,0,0.6)",
             }}
