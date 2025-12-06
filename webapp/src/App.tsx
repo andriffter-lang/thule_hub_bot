@@ -38,7 +38,7 @@ function App() {
       flexDirection: "column",
       gap: "12px"
     }}>
-      <h1 style={{ textAlign: "center" }}>Thule Hub Mini App</h1>
+      <h1 style={{ textAlign: "center", color: "black" }}>Thule Hub Mini App</h1>
 
       {SECTIONS.map(section => (
         <div
@@ -48,7 +48,7 @@ function App() {
             padding: "16px",
             borderRadius: "12px",
             border: "1px solid rgba(0,0,0,0.1)",
-            background: "white",
+            background: "black",
             cursor: "pointer",
           }}
         >
