@@ -70,18 +70,33 @@ function App() {
         position: "relative",
       }}
     >
-      <h1
+      {/* ЛОГОТИП THULE HUB RUSSIA */}
+      <div
         style={{
           textAlign: "center",
-          fontSize: "26px",
-          fontWeight: "700",
-          marginBottom: "10px",
-          color: "#4CAF50",
-          textShadow: "0 3px 6px rgba(0,0,0,0.7)",
+          marginBottom: "18px",
+          fontSize: "34px",
+          fontWeight: 900,
+          letterSpacing: "2px",
+          fontFamily: "'Roboto Black', 'Arial Black', system-ui, sans-serif",
+          color: "#000000",
+          textShadow: `
+            0 1px 0 #ffffff,
+            0 2px 0 #d9d9d9,
+            0 3px 0 #b3b3b3,
+            0 4px 0 #8c8c8c,
+            0 5px 0 #666666,
+            0 6px 0 #404040,
+            0 7px 10px rgba(0,0,0,0.9)
+          `,
+          transform: "translateY(-20px)",
+          animation: "logoDrop 0.8s cubic-bezier(.25,.75,.45,1.4) forwards",
         }}
       >
-        Thule Hub Russia
-      </h1>
+        THULE HUB
+        <br />
+        RUSSIA
+      </div>
 
       {/* MAIN BUTTONS */}
       {SECTIONS.map((section, index) => {
@@ -102,7 +117,8 @@ function App() {
               borderRadius: "12px",
 
               // бетон
-              backgroundImage: "url('/thule_hub_bot/images/concrete_base.jpg')",
+              backgroundImage:
+                "url('/thule_hub_bot/images/concrete_base.jpg')",
               backgroundSize: "cover",
               backgroundPosition: "center",
               backgroundRepeat: "no-repeat",
@@ -131,15 +147,15 @@ function App() {
               animation: `drop 0.65s cubic-bezier(.25,.75,.45,1.4) forwards`,
               animationDelay: `${index * 0.13}s`,
             }}
-            onMouseDown={(e) =>
-              (e.currentTarget.style.transform = "scale(0.97)")
-            }
-            onMouseUp={(e) =>
-              (e.currentTarget.style.transform = "scale(1)")
-            }
-            onMouseLeave={(e) =>
-              (e.currentTarget.style.transform = "scale(1)")
-            }
+            onMouseDown={(e) => {
+              (e.currentTarget as HTMLDivElement).style.transform = "scale(0.97)";
+            }}
+            onMouseUp={(e) => {
+              (e.currentTarget as HTMLDivElement).style.transform = "scale(1)";
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLDivElement).style.transform = "scale(1)";
+            }}
           >
             <div
               style={{
@@ -174,7 +190,8 @@ function App() {
           style={{
             padding: "20px",
             borderRadius: "12px",
-            backgroundImage: "url('/thule_hub_bot/images/concrete_base.jpg')",
+            backgroundImage:
+              "url('/thule_hub_bot/images/concrete_base.jpg')",
             backgroundSize: "cover",
             backgroundPosition: "center",
             border: "2px solid #3a3a3a",
