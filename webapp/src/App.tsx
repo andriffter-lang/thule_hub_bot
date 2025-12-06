@@ -47,9 +47,13 @@ function App() {
         gap: "16px",
         background: backgroundColor,
         color: textColor,
+        width: "100%",
         minHeight: "100vh",
+        boxSizing: "border-box",
+        overflowX: "hidden",
       }}
     >
+
       {/* === Заголовок === */}
       <h1
         style={{
