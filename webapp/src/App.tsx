@@ -42,7 +42,7 @@ function App() {
       position: "absolute",
       width: "90px",
       height: "90px",
-      backgroundImage: "url('/images/dust.png')",
+      backgroundImage: "url('/thule_hub_bot/images/dust.png')",
       backgroundSize: "cover",
       pointerEvents: "none",
       opacity: "0",
@@ -102,7 +102,7 @@ function App() {
               borderRadius: "12px",
 
               // бетон
-              backgroundImage: "url('/images/concrete_base.jpg')",
+              backgroundImage: "url('/thule_hub_bot/images/concrete_base.jpg')",
               backgroundSize: "cover",
               backgroundPosition: "center",
               backgroundRepeat: "no-repeat",
@@ -174,7 +174,7 @@ function App() {
           style={{
             padding: "20px",
             borderRadius: "12px",
-            backgroundImage: "url('/images/concrete_base.jpg')",
+            backgroundImage: "url('/thule_hub_bot/images/concrete_base.jpg')",
             backgroundSize: "cover",
             backgroundPosition: "center",
             border: "2px solid #3a3a3a",
