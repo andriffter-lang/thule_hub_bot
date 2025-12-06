@@ -56,20 +56,6 @@ function App() {
 
     setTimeout(() => dust.remove(), 900);
   };
-  <button
-    onClick={() => {
-      alert("click works");
-      tg?.sendData("TEST");
-    }}
-    style={{
-      padding: "10px",
-      background: "red",
-      color: "white",
-      zIndex: 9999
-    }}
-  >
-    TEST BUTTON
-  </button>
 
   return (
     <div
@@ -84,6 +70,26 @@ function App() {
         position: "relative",
       }}
     >
+
+      {/* 🔥 ТЕСТОВАЯ КНОПКА */}
+      <button
+        onClick={() => {
+          alert("click works");
+          tg?.sendData("TEST");
+        }}
+        style={{
+          padding: "12px 20px",
+          marginBottom: "20px",
+          background: "red",
+          color: "white",
+          borderRadius: "10px",
+          fontSize: "18px",
+          zIndex: 9999
+        }}
+      >
+        TEST BUTTON
+      </button>
+
       {/* ЛОГОТИП THULE HUB RUSSIA */}
       <div
         style={{
@@ -124,7 +130,7 @@ function App() {
             onClick={() => handleClick(section.id)}
             ref={(el) => {
               if (el) {
-                setTimeout(() => createDust(el), index * 140 + 350); // пыль появляется после падения
+                setTimeout(() => createDust(el), index * 140 + 350);
               }
             }}
             style={{
@@ -132,16 +138,12 @@ function App() {
               padding: "20px",
               borderRadius: "12px",
 
-              // бетон
-              backgroundImage:
-                "url('/thule_hub_bot/images/concrete_base.jpg')",
+              backgroundImage: "url('/thule_hub_bot/images/concrete_base.jpg')",
               backgroundSize: "cover",
               backgroundPosition: "center",
               backgroundRepeat: "no-repeat",
 
               border: "2px solid #3a3a3a",
-
-              // объём + затемнение по краям (эффект старого бетона)
               boxShadow: `
                 0 8px 20px rgba(0,0,0,0.75),
                 inset 0 0 40px rgba(0,0,0,0.35),
@@ -156,10 +158,7 @@ function App() {
               overflow: "visible",
 
               opacity: 0,
-
-              // падение + случайный наклон
               transform: `translate(${offsetX}px, ${offsetY - 40}px) rotate(${rot}deg)`,
-
               animation: `drop 0.65s cubic-bezier(.25,.75,.45,1.4) forwards`,
               animationDelay: `${index * 0.13}s`,
             }}
@@ -167,7 +166,7 @@ function App() {
               (e.currentTarget as HTMLDivElement).style.transform = "scale(0.97)";
             }}
             onMouseUp={(e) => {
-              (e.currentTarget as HTMLDivElement).style.transform = "scale(1)";
+              (e.currentTarget as HTMLDivDivElement).style.transform = "scale(1)";
             }}
             onMouseLeave={(e) => {
               (e.currentTarget as HTMLDivElement).style.transform = "scale(1)";
@@ -206,8 +205,7 @@ function App() {
           style={{
             padding: "20px",
             borderRadius: "12px",
-            backgroundImage:
-              "url('/thule_hub_bot/images/concrete_base.jpg')",
+            backgroundImage: "url('/thule_hub_bot/images/concrete_base.jpg')",
             backgroundSize: "cover",
             backgroundPosition: "center",
             border: "2px solid #3a3a3a",
