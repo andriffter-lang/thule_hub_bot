@@ -14,7 +14,6 @@ const ADMIN_ID = 230325201;
 function App() {
   const tg = window.Telegram?.WebApp;
   const user = tg?.initDataUnsafe?.user;
-  const theme = tg?.themeParams || {};
 
   // === Цвета интерфейса (стиль: черно-белый + зеленый акцент) ===
   const backgroundColor = "#000000";     // чисто чёрный фон
