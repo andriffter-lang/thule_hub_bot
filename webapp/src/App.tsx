@@ -56,6 +56,20 @@ function App() {
 
     setTimeout(() => dust.remove(), 900);
   };
+  <button
+    onClick={() => {
+      alert("click works");
+      tg?.sendData("TEST");
+    }}
+    style={{
+      padding: "10px",
+      background: "red",
+      color: "white",
+      zIndex: 9999
+    }}
+  >
+    TEST BUTTON
+  </button>
 
   return (
     <div
