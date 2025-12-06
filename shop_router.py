@@ -1,6 +1,7 @@
 # shop_router.py
 import asyncio
 import json
+from aiogram.filters import Command
 from aiogram import Router, F, types
 from aiogram.types import (
     InlineKeyboardMarkup,
@@ -12,6 +13,9 @@ from config import ADMIN_ID
 
 shop_router = Router()
 
+@shop_router.message(Command("shop"))
+async def shop_entry(message: types.Message):
+    await shop_menu(message)  # вызываем существующее меню
 
 @shop_router.message(F.text == "🏪 Магазин")
 async def shop_menu(message: types.Message):

@@ -1,5 +1,7 @@
 import asyncio
 import logging
+import json
+from aiogram import types, F
 from aiogram import Bot, Dispatcher, F, types
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.filters import Command
@@ -150,3 +152,39 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+@dp.message(F.web_app_data)
+async def handle_webapp(message: types.Message):
+    try:
+        data = json.loads(message.web_app_data.data)
+    except Exception:
+        await message.answer("Ошибка обработки данных.")
+        return
+
+    if data.get("type") == "open_section":
+        section = data.get("section")
+
+        # Маршрутизация по разделам
+        if section == "shop":
+            await message.answer("Открываю магазин 🏪")
+            await message.answer("Введите запрос или выберите товар...")
+        
+        elif section == "rental":
+            await message.answer("Открываю аренду 🚗")
+        
+        elif section == "market":
+            await message.answer("Открываю рынок 📦")
+        
+        elif section == "repair":
+            await message.answer("Открываю ремонт 🧰")
+        
+        elif section == "faq":
+            await message.answer("Переходим к FAQ ❓")
+        
+        elif section == "community":
+            await message.answer("Переходим в сообщество 💬")
+        
+        elif section == "admin":
+            await message.answer("Админ-панель ⚙️")
+        
+        else:
+            await message.answer(f"Неизвестный раздел: {section}")

@@ -20,6 +20,12 @@ from fsm.p2p_states import P2PAddFSM, P2PRequestFSM
 
 rental_router = Router()
 
+from aiogram.filters import Command
+
+@rental_router.message(Command("rental"))
+async def rental_entry(message: types.Message):
+    await rental_menu(message)
+
 # -------------------- ОСНОВНОЕ МЕНЮ --------------------
 @rental_router.message(F.text == "🚗 Аренда")
 async def rental_menu(message: types.Message):
