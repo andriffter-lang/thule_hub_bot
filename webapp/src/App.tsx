@@ -35,8 +35,7 @@ function App() {
         gap: "16px",
         minHeight: "100vh",
         color: "#fff",
-        background: "rgba(0, 0, 0, 0.65)",
-        backdropFilter: "blur(2px)",
+        background: "transparent",        
       }}
     >
       <h1
