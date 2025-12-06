@@ -45,7 +45,7 @@ def main_menu(is_admin: bool = False) -> ReplyKeyboardMarkup:
     webapp_button = KeyboardButton(
         text="🌐 Mini App",
         web_app=WebAppInfo(
-            url="https://yourusername.github.io/yourrepo/"   # ← заменишь на свой GitHub Pages URL
+            url="https://andriffter-lang.github.io/thule_hub_bot/"   # ← заменишь на свой GitHub Pages URL
         ),
     )
 

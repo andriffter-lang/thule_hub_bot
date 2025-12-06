@@ -17,7 +17,7 @@ body {
 /* ===== ФОН: КИРПИЧНАЯ КЛАДКА ===== */
 
 body {
-  background-image: url("https://i.imgur.com/4Y9H6bl.jpeg");
+  background-image: url("/images/brick.jpg");
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
